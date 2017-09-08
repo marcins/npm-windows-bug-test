@@ -2,11 +2,13 @@ const npm = require('../../npm/lib/npm');
 const path = require('path');
 const rimraf = require('rimraf');
 
+const RUNS = 20;
+
 function run() {
     return new Promise((resolve, reject) => {
         rimraf.sync(path.resolve('./node_modules'));
         npm.load({
-            loglevel: 'verbose',
+            loglevel: 'silly',
             noSave: true
         }, function (err) {
             if (err) {
@@ -26,7 +28,7 @@ function run() {
 }
 
 let chain = Promise.resolve();
-for (let i = 0; i <= 20; i++) {
+for (let i = 0; i <= RUNS; i++) {
     chain = chain
         .then(run, err => {
             if (err.code === 'EBADPLATFORM') {
